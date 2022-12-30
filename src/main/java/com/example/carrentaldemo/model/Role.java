@@ -1,20 +1,23 @@
 package com.example.carrentaldemo.model;
 
-import lombok.Data;
+import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
 @Entity
-@Data
-@Table(name ="role")
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@Table(name ="userrole")
 public class Role {
     @Id
-    @Column(name = "roleid")
+    @Column(name = "roleid",nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int Roleid;
+    private int role;
 
     @NotNull
-    @Column(name="rolename")
+    @Column(name="userrolename")
     private String roleName;
 }

@@ -2,13 +2,16 @@ package com.example.carrentaldemo.model;
 
 
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.Set;
 
-@Data
+@Getter
+@Setter
 @Entity
 @Table(name="user")
 public class  User {
@@ -39,7 +42,7 @@ public class  User {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="roleid")
-    private Role roleid;
+    private Role role;
 
 
     @OneToMany(mappedBy="user")
@@ -56,7 +59,6 @@ public class  User {
 
     @OneToMany(mappedBy = "user2",fetch = FetchType.LAZY)
     private List<Complaint> user2;
-
 
 
 }
