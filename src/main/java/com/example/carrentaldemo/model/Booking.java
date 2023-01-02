@@ -4,6 +4,8 @@ package com.example.carrentaldemo.model;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.util.Date;
+import java.sql.Timestamp;
 
 
 @Data
@@ -23,19 +25,13 @@ public class Booking{
     private User user;
 
     @Column(name="bookingdate",nullable=false)
-    private String bookingdate;
-
-    @Column(name="bookingtime",nullable=false)
-    private String bookingtime;
+    private Timestamp bookingdate;
 
     @Column(name="returndate",nullable=false)
-    private String returndate;
-
-    @Column(name="returntime",nullable=false)
-    private String returntime;
+    private Timestamp returndate;
 
     @Column(name="Extratime",nullable=false)
-    private String extratime;
+    private Timestamp extratime;
 
     @OneToOne(mappedBy="booking")
     private Payment payment;

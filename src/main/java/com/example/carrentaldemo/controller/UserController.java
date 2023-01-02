@@ -10,11 +10,9 @@ import com.example.carrentaldemo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import javax.print.attribute.standard.JobKOctets;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.HashMap;
@@ -42,17 +40,51 @@ public class UserController {
     }
 
     @PostMapping("/users/owner")
-    public ResponseEntity<User> createOwner(@RequestBody UserDto user){
-        System.out.println("we are inside ,Validation done");
-        HashMap<String,String> validationSuccessful=new HashMap<>();
-        validationSuccessful.put("status","True");
-//        User us1=userService.createUser(user);
-        User u1 =new User();
-        u1.setRole(roleRepository.findById(user.getRoleid()).get());
-        u1.setUsername(user.getUserName());
-        u1.setAddress(user.getAddress());
-        u1=userRepository.save(u1);
-        return new ResponseEntity<User>(u1, HttpStatus.OK);
+    public ResponseEntity<Object> createOwner(@RequestBody @Valid UserDto user){
+        HashMap<String,String> validationMap=new HashMap<>();
+        if(user.getRoleid()==0){
+            validationMap.put("status","false");
+            validationMap.put("message","Enter a valid Role");
+            return new ResponseEntity<>(validationMap,HttpStatus.FORBIDDEN);
+        }
+        User owner =new User();
+        Role role=roleRepository.findById(user.getRoleid()).get();
+        if (role.getRoleName().equals("Owner")){
+            owner.setRole(roleRepository.findById(user.getRoleid()).get());
+        }
+        else{
+            validationMap.put("status","false");
+            validationMap.put("message","Enter a valid Role");
+            return new ResponseEntity<>(validationMap,HttpStatus.FORBIDDEN);
+        }
+        owner.setUsername(user.getUserName());
+        owner.setAddress(user.getAddress());
+        owner=userRepository.save(owner);
+        return new ResponseEntity<>(owner, HttpStatus.OK);
+    }
+
+    @PostMapping("/users/hirer")
+    public ResponseEntity<Object> createHirer(@Valid @RequestBody UserDto user){
+        HashMap<String,String> validationMap=new HashMap<>();
+        if(user.getRoleid()==0){
+            validationMap.put("status","false");
+            validationMap.put("message","Enter a valid Role");
+            return new ResponseEntity<>(validationMap,HttpStatus.FORBIDDEN);
+        }
+        Role role=roleRepository.findById(user.getRoleid()).get();
+        User hirer=new User();
+        if(role.getRoleName().equals("Hirer")){
+            hirer.setRole(roleRepository.findById(user.getRoleid()).get());
+        }
+        else{
+            validationMap.put("status","false");
+            validationMap.put("message","Enter a valid Role");
+            return new ResponseEntity<>(validationMap,HttpStatus.FORBIDDEN);
+        }
+        hirer.setUsername(user.getUserName());
+        hirer.setAddress(user.getAddress());
+        hirer=userRepository.save(hirer);
+        return new ResponseEntity<>(hirer,HttpStatus.OK);
 
     }
 }

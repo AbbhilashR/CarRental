@@ -1,2 +1,4 @@
-package com.example.carrentaldemo.model;public class BookingDto {
+package com.example.carrentaldemo.model;
+
+public class BookingDto {
 }
